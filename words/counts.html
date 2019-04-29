@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+    var str1=" 中华民族历史悠久，五千年来的风风雨雨，千锤百炼，造就了博大精深的中华传统文化。中华文化教会我们做人行事之道，也使中国成为了“礼仪之邦”。但世事白云苍狗，万物处于不断的发展变化中，中华传统文化固然优秀，孔老夫子的思想诚然深邃，也不能完全适应现如今世界这日新月异的变化，于是具有前瞻精神的国家领导人员便发布了《关于实施中华传统文化发展工程的意见》，提到了中华传统文化的发展方向：应坚持创造性转化和创新性发展。但该怎么做呢？文化在传承中创新大江东去，浪淘尽多少风流人物，他们的思想随着文化传承得以流传，也随着文化的传承加以创新。汉字，中华传统文化表现形式之一，之所以经久不衰，就是因为世世代代中国人为了迎合需求不断改进及创新它，从繁杂厚重的甲骨文到圆润大气的隶书到如今的简体汉字，每一种汉字形式代表着一个时代的特点与人们的生活方式，这也是“苟日新又日新日日新”的现代含义。还有新版京剧《草船借剑》融合了京剧唱腔与现代科技元素，让京剧更加生动形象。取其精华，弃之糟粕泱泱华夏，赫赫文明，五千年来大浪淘沙，留下的依旧有一些腐朽的思想与文化，一代圣贤孔夫子还曾说过：“唯小人与女子难养也。”这些刻在中国人骨子里的男尊女卑的观念直到改革开放后才逐渐被剔除，还有“万般皆下品，唯有读书高”则显示了对体力劳动者的轻视，文化的创新需要一个自我革新机制，认识到这种落后文化思想后我们应该对其摒弃，辛亥革命后孙中山废除了见面行跪拜礼，女子裹脚等封建习俗，促进了人们的思想解放。文化创新不能只在新文化创新不能只在新，滥竽充数等于火上浇油，我们在创新同时，也不能忘记文化传统，传统无异于根本，像“比基尼京剧”，污化黄河大合唱等，这些就是忘记了传统文化的本质内涵造成的，只图形式创新，忽略自身根源，是文化创新大忌。中华传统文化在不断创新中得以传承及发展。中华传统文化，传承美，创新更美！"
+    var english=/[A-Za-z]+/;
+    var chinese=/[\u4E00-\u9FFF]+/;
+    var num= 1,length= 0,words= 0, step1="", step2="";
+     if(str1.search(english)==0 || str1.trim().search(english)==0){
+        /*说明该字符串第一个字母为英文*/
+         StartEng(str1);
+     }else if(str1.search(chinese)==0 || str1.trim().search(chinese)==0){
+        /*首字母不是英文*/
+         if(str1.search(english)>0){
+             step1=str1.slice(0,str1.search(english));
+            words+=step1.length;
+             step2=str1.slice(str1.search(english));
+             StartEng(step2);
+         }else{
+             /*先去掉空格在数数*/
+             words+=str1.replace(/\s+/g,"").length;
+         }
+    }
+    console.log(str1);
+    console.log(words);
+    /*第二段是汉字开始的*/
+    function notFirstJudgeIsEngOfChi(step2){
+        if(step2.search(english)>0){
+            step1=step2.slice(0,step2.search(english));
+            words+=step1.length;
+            /*把这段字符串开始的英语及后边的字符保存在step2中*/
+            step2=step2.slice(step2.search(english));
+            /*字符串中包含中文*/
+            if(step2.search(chinese)>0){
+                step1=step2.slice(0,step2.search(chinese));
+                allEng(step1);
+                step2=step2.slice(step2.search(chinese));
+                notFirstJudgeIsEngOfChi(step2);
+            }else{
+                /*不包含中文的情况*/
+                allEng(step1);
+            }
+        }else{
+            words+=step2.length;
+        }
+    }
+    /*纯英文*/
+    function allEng(str1){
+        if(str1.indexOf(" ")!=-1){
+            var yyStr=str1.split(" ");
+            for(var i=0;i<yyStr.length;i++){
+                if(yyStr[i]!=" "){
+                    var currWord=yyStr[i].split(/[,.?!]/);
+                    if(currWord.length>1)
+                        words+=(currWord.length-1);
+                    var r = currWord.filter(function (s) {
+                        return s && s.trim(); // 注：IE9(不包含IE9)以下的版本没有trim()方法
+                    });
+                    words+=r.length;
+
+                }
+            }
+        }else
+            words+=1;
+    }
+
+    /*已英文开头*/
+    function StartEng(str1){
+        /*说明该字符串第一个字母为英文*/
+        if(str1.search(chinese)>0){
+            step1= str1.slice(0,str1.search(chinese));
+            allEng(step1);
+            step2=str1.slice(str1.search(chinese));
+            notFirstJudgeIsEngOfChi(step2);
+        }
+        /*纯英文不包含中文*/
+        else{
+            allEng(str1);
+        }
+    }
+</script>
+</body>
+</html>
